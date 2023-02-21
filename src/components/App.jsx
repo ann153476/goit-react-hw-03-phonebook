@@ -63,7 +63,6 @@ class App extends Component {
       localStorage.setItem('contacts', JSON.stringify(contacts));
     }
   }
-
   /////////////////
   render() {
     const { filter } = this.state;
