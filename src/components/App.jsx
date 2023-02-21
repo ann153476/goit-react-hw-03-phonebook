@@ -11,12 +11,7 @@ const message = 'There is no contacts';
 
 class App extends Component {
   state = {
-    contacts: [
-      { id: 'id-1', name: 'Rosie Simpson', number: '4591256' },
-      { id: 'id-2', name: 'Hermione Kline', number: '4438912' },
-      { id: 'id-3', name: 'Eden Clements', number: '6451779' },
-      { id: 'id-4', name: 'Annie Copeland', number: '2279126' },
-    ],
+    contacts: [],
     filter: '',
   };
   addContact = ({ name, number }) => {
@@ -53,6 +48,23 @@ class App extends Component {
       contacts: prevState.contacts.filter(contact => contact.id !== todoId),
     }));
   };
+  //////////////////////
+  componentDidMount() {
+    const items = JSON.parse(localStorage.getItem('contacts'));
+    if (items?.length) {
+      this.setState({ items });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { contacts } = this.state;
+    console.log(contacts);
+    if (contacts.length !== prevState.contacts.length) {
+      localStorage.setItem('contacts', JSON.stringify(contacts));
+    }
+  }
+
+  /////////////////
   render() {
     const { filter } = this.state;
     const visibleContacts = this.getVisibleContacts();
