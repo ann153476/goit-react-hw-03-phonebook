@@ -4,10 +4,8 @@ import { nanoid } from 'nanoid';
 
 import ContactForm from './ContactForm/ContactForm';
 import ContactList from './ContactList/ContactList';
-import Filter from './filter/Filter';
+import Filter from './Filter/Filter';
 import Notification from './Notification/Notification';
-
-const message = 'There is no contacts';
 
 class App extends Component {
   state = {
@@ -17,12 +15,14 @@ class App extends Component {
   addContact = ({ name, number }) => {
     const normalizedName = name.toLowerCase();
 
-    this.state.contacts.forEach(el => {
-      if (el.name.toLowerCase() === normalizedName) {
-        alert(`${name} is already in contacts`);
-        return;
-      }
-    });
+    const alreadyInContacts = this.state.contacts.find(
+      el => el.name.toLowerCase() === normalizedName
+    );
+    if (alreadyInContacts) {
+      alert(`${name} is already in contacts`);
+
+      return;
+    }
     const contact = {
       id: nanoid(),
       name: name,
@@ -43,9 +43,9 @@ class App extends Component {
       contact.name.toLowerCase().includes(normalizedFilter)
     );
   };
-  deleteContact = todoId => {
+  deleteContact = contactId => {
     this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== todoId),
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
     }));
   };
   //////////////////////
@@ -58,7 +58,6 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { contacts } = this.state;
-    console.log(contacts, '<');
     if (contacts.length !== prevState.contacts.length) {
       localStorage.setItem('contacts', JSON.stringify(contacts));
     }
@@ -73,7 +72,7 @@ class App extends Component {
         <ContactForm onSubmit={this.addContact} />
         <Filter value={filter} onChange={this.changeFilter}></Filter>
         {visibleContacts.length === 0 ? (
-          <Notification message={message} />
+          <Notification message="There is no contacts" />
         ) : (
           <ContactList
             contacts={visibleContacts}
