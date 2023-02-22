@@ -50,15 +50,15 @@ class App extends Component {
   };
   //////////////////////
   componentDidMount() {
-    const items = JSON.parse(localStorage.getItem('contacts'));
-    if (items?.length) {
-      this.setState({ items });
+    const contacts = JSON.parse(localStorage.getItem('contacts'));
+    if (contacts?.length) {
+      this.setState({ contacts });
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
     const { contacts } = this.state;
-    console.log(contacts);
+    console.log(contacts, '<');
     if (contacts.length !== prevState.contacts.length) {
       localStorage.setItem('contacts', JSON.stringify(contacts));
     }
